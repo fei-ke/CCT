@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CCT</string>
+    <string name="xposedDescription">Force Wechat use Chrome Custom Tabs</string>
+</resources>
