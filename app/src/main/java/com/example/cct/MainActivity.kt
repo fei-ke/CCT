@@ -10,12 +10,9 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        CCTHelper.init(applicationContext)
         button.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("rawUrl", "https://www.baidu.com")
-
-            CCTUtil.open(this, intent)
+            CCTHelper.open(this, Intent().also { it.putExtra(Constants.KEY_RAW_URL, "http://www.baidu.com") })
         }
     }
 }

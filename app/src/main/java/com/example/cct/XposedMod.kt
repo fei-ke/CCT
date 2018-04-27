@@ -2,30 +2,21 @@ package com.example.cct
 
 import android.app.Activity
 import android.app.Application
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.support.customtabs.CustomTabsClient
-import android.support.customtabs.CustomTabsServiceConnection
-import android.support.customtabs.CustomTabsSession
-import android.util.Log
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.XC_MethodHook
+import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers.*
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 
 class XposedMod : IXposedHookLoadPackage {
-    companion object {
-        val MM_PACKAGE_NAME = "com.tencent.mm"
-        val CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome"  // Change when in stable
-        var mCustomTabsSession: CustomTabsSession? = null
-    }
-
 
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
-        if (lpparam.packageName == MM_PACKAGE_NAME) {
+        if (lpparam.packageName == Constants.MM_PACKAGE_NAME) {
             hook(lpparam)
         }
     }
@@ -34,32 +25,35 @@ class XposedMod : IXposedHookLoadPackage {
 
         findAndHookMethod(Application::class.java, "onCreate", object : XC_MethodHook() {
             override fun afterHookedMethod(param: MethodHookParam) {
-                val connection = object : CustomTabsServiceConnection() {
-                    override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
-                        mCustomTabsSession = client.newSession(null)
-                        Log.i("xxxxxxxxxonCustomTabsServiceConnected", "$mCustomTabsSession")
-                    }
-
-                    override fun onServiceDisconnected(name: ComponentName) {
-
-                    }
-                }
-                val ok = CustomTabsClient.bindCustomTabsService(param.thisObject as Context, CUSTOM_TAB_PACKAGE_NAME, connection)
-                Log.i("xxxxxxxxxok", "$ok")
+                CCTHelper.init(param.thisObject as Context)
             }
         })
 
         findAndHookMethod(Activity::class.java, "startActivityForResult", Intent::class.java, Int::class.java, Bundle::class.java,
                 object : XC_MethodHook() {
                     override fun beforeHookedMethod(param: MethodHookParam) {
-                        val intent = param.args[0] as Intent
-                        if (intent.component?.className == "com.tencent.mm.plugin.webview.ui.tools.WebViewUI"
-                                && !intent.getBooleanExtra("ignoreCCT", false)) {
-                            val activity = param.thisObject as Activity
-                            CCTUtil.open(activity, intent)
-                            //returm
-                            param.result = null
+                        try {
+                            val intent = param.args[0] as Intent
+                            if (intent.component?.className == Constants.MM_WEB_VIEW_UI
+                                    && !intent.getBooleanExtra(Constants.KEY_IGNORE_CCT, false)) {
+
+                                val activity = param.thisObject as Activity
+
+                                val url = intent.getStringExtra(Constants.KEY_RAW_URL)
+
+                                val uri = Uri.parse(Constants.CCT_PROVIDER)
+                                val result = activity.contentResolver.call(uri, Constants.METHOD_USE_CCT, url, null)
+                                if (result.getBoolean(Constants.KEY_USE_CCT)) {
+                                    CCTHelper.open(activity, intent)
+
+                                    //return
+                                    param.result = null
+                                }
+                            }
+                        } catch (t: Throwable) {
+                            XposedBridge.log(t)
                         }
+
                     }
                 })
 
