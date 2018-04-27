@@ -13,4 +13,7 @@ object Constants {
     const val METHOD_USE_CCT = "useCCT"
     const val KEY_USE_CCT = "use_cct"
     const val KEY_IGNORE_CCT = "ignore_cct"
+
+    const val KEY_RULE_NAME = "rule_name"
+    const val KEY_RULE_PATTERN = "rule_pattern"
 }

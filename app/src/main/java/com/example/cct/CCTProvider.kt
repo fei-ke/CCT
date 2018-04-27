@@ -33,9 +33,13 @@ class CCTProvider : ContentProvider() {
 
     override fun call(method: String, arg: String?, extras: Bundle?): Bundle? {
         return when (method) {
-            Constants.METHOD_USE_CCT -> Bundle().also { it.putBoolean(Constants.KEY_USE_CCT, true) }
+            Constants.METHOD_USE_CCT -> Bundle().also { it.putBoolean(Constants.KEY_USE_CCT, useCCT(arg)) }
             else -> null
         }
 
+    }
+
+    private fun useCCT(url: String?): Boolean {
+        return url != null && !Pref.isInIgnoreList(context, url)
     }
 }

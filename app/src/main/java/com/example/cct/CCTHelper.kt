@@ -100,7 +100,7 @@ object CCTHelper {
 
 
         val ruleIntent = Intent(Constants.ACTION_ADD_RULE)
-        ruleIntent.setClassName(BuildConfig.APPLICATION_ID, AddRuleActivity::class.java.name)
+        ruleIntent.setClassName(BuildConfig.APPLICATION_ID, EditRuleActivity::class.java.name)
         ruleIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
         ruleIntent.putExtras(intent.extras)
 
