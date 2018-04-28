@@ -7,12 +7,12 @@ object Pref {
     private var preferences: SharedPreferences? = null
 
     private fun getPreference(context: Context) = preferences
-            ?: context.getSharedPreferences("ignore_list", Context.MODE_PRIVATE)
+            ?: context.getSharedPreferences(Constants.IGNORE_LIST_PREF_NAME, Context.MODE_PRIVATE)
 
-    fun getAll(context: Context) =
+    fun getAll(context: Context): Map<String, *> =
             getPreference(context).all
 
-    fun hasKey(context: Context, key: String) =
+    fun hasKey(context: Context, key: String): Boolean =
             getPreference(context).contains(key)
 
     fun add(context: Context, key: String, pattern: String) =
@@ -22,7 +22,7 @@ object Pref {
             getPreference(context).edit().remove(key).apply()
 
 
-    fun isInIgnoreList(context: Context, url: String) =
+    fun isInIgnoreList(context: Context, url: String): Boolean =
             getPreference(context).all.values.find { Regex(it.toString()).matches(url) } != null
 
 }

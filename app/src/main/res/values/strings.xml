@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">CCT</string>
-    <string name="xposedDescription">Force Wechat use Chrome Custom Tabs</string>
+    <string name="xposedDescription">Force Wechat use Chrome Custom Tabs open web link</string>
     <string name="open_in_wechat">Open in Wechat</string>
-    <string name="add_rule">Add Rule</string>
+    <string name="add_rule">Edit Rule</string>
+    <string name="edit_rule_dialog_message">Use Regular Expression to match web link, if matched the link will be opened in Wechat.</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="test">Test</string>
+    <string name="duplicate_rule_name_hint">Same rule name already exists, will be overwritten when save</string>
+    <string name="rule_pattern_empty_hint">Rule pattern can\'t empty</string>
+    <string name="menu_add_rule">Add new rule</string>
+    <string name="confirm_delete">Confirm delete?</string>
 </resources>

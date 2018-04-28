@@ -23,8 +23,8 @@ class RuleListActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add("新增规则")
-                .setIcon(android.R.drawable.ic_menu_add)
+        menu.add(R.string.menu_add_rule)
+                .setIcon(R.drawable.ic_menu_add)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setOnMenuItemClickListener {
                     val intent = Intent(this, EditRuleActivity::class.java)
@@ -42,14 +42,14 @@ class RuleListActivity : AppCompatActivity() {
                 val ruleName = data[position][KEY_RULE_NAME].toString()
 
                 AlertDialog.Builder(activity)
-                        .setTitle("确认删除?")
-                        .setPositiveButton("确认", { _, _ ->
+                        .setTitle(getString(R.string.confirm_delete))
+                        .setPositiveButton(R.string.dialog_ok, { _, _ ->
                             Pref.remove(activity, ruleName)
                             data.removeAt(position)
                             (listAdapter as SimpleAdapter)
                                     .notifyDataSetChanged()
                         })
-                        .setNegativeButton("取消", null)
+                        .setNegativeButton(R.string.dialog_cancel, null)
                         .show()
                 return@setOnItemLongClickListener true
             }

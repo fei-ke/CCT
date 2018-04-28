@@ -2,5 +2,13 @@
     <string name="app_name">CCT</string>
     <string name="xposedDescription">使用 Chrome Custom Tabs 打开微信内连接</string>
     <string name="open_in_wechat">返回微信打开</string>
-    <string name="add_rule">添加规则</string>
+    <string name="add_rule">编辑规则</string>
+    <string name="edit_rule_dialog_message">使用正则进行匹配，符合规则的链接将会在微信内部打开</string>
+    <string name="dialog_ok">确定</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="test">测试</string>
+    <string name="duplicate_rule_name_hint">已有同名规则存在，保存将覆盖</string>
+    <string name="rule_pattern_empty_hint">不能为空</string>
+    <string name="menu_add_rule">新增规则</string>
+    <string name="confirm_delete">确认删除？</string>
 </resources>

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
     >
 
     <android.support.design.widget.TextInputLayout
@@ -15,7 +18,7 @@
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="name"
+            android:hint="Name"
             />
     </android.support.design.widget.TextInputLayout>
 
@@ -28,7 +31,7 @@
             android:id="@+id/editTextPattern"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="pattern"
+            android:hint="Pattern"
             />
     </android.support.design.widget.TextInputLayout>
 

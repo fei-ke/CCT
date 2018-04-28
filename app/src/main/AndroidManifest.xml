@@ -18,7 +18,6 @@
         </activity>
         <activity
             android:name=".EditRuleActivity"
-            android:excludeFromRecents="true"
             android:exported="true"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Translucent">

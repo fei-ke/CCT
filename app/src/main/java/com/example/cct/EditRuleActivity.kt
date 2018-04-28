@@ -42,8 +42,6 @@ class EditRuleActivity : AppCompatActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
 
-            setStyle(DialogFragment.STYLE_NORMAL, 0)
-
             rawUrl = arguments.getString(Constants.KEY_RAW_URL)
             rawName = arguments.getString(Constants.KEY_RULE_NAME)
             rulePattern = arguments.getString(Constants.KEY_RULE_PATTERN)
@@ -58,18 +56,23 @@ class EditRuleActivity : AppCompatActivity() {
             editTextName.setText(rawName)
             editTextPattern.setText(rulePattern)
 
-            val dialog = AlertDialog.Builder(context, theme)
+            val dialogBuilder = AlertDialog.Builder(context, theme)
+                    .setMessage(R.string.edit_rule_dialog_message)
                     .setView(contentView)
-                    .setPositiveButton("确定", null)
-                    .setNegativeButton("取消", null)
-                    .setNeutralButton("测试", null)
-                    .create()
+                    .setPositiveButton(R.string.dialog_ok, null)
+                    .setNegativeButton(R.string.dialog_cancel, null)
+
+            if (rawUrl != null) {
+                dialogBuilder.setNeutralButton(R.string.test, null)
+            }
+
+            val dialog = dialogBuilder.create()
 
             editTextName.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable) {
                     val text = s.toString()
                     if (rawName != text && Pref.hasKey(activity, text)) {
-                        editTextName.error = "已有同名规则存在，保存将覆盖"
+                        editTextName.error = getString(R.string.duplicate_rule_name_hint)
                     }
                 }
 
@@ -90,7 +93,7 @@ class EditRuleActivity : AppCompatActivity() {
                     }
 
                     if (TextUtils.isEmpty(pattern)) {
-                        editTextPattern.error = "不能为空"
+                        editTextPattern.error = getString(R.string.rule_pattern_empty_hint)
                         return@setOnClickListener
                     }
 
