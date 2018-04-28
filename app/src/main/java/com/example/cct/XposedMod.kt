@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
@@ -16,7 +17,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
 class XposedMod : IXposedHookLoadPackage {
 
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
-        if (lpparam.packageName == Constants.MM_PACKAGE_NAME) {
+        if (lpparam.packageName == Constants.MM_PACKAGE_NAME && lpparam.isFirstApplication) {
             hook(lpparam)
         }
     }
@@ -32,6 +33,7 @@ class XposedMod : IXposedHookLoadPackage {
         findAndHookMethod(Activity::class.java, "startActivityForResult", Intent::class.java, Int::class.java, Bundle::class.java,
                 object : XC_MethodHook() {
                     override fun beforeHookedMethod(param: MethodHookParam) {
+                        Log.i("XposedMod", "startActivityForResult", Throwable())
                         try {
                             val intent = param.args[0] as Intent
                             if (intent.component?.className == Constants.MM_WEB_VIEW_UI
@@ -57,24 +59,26 @@ class XposedMod : IXposedHookLoadPackage {
                     }
                 })
 
-//        val classView = findClass("com.tencent.mm.plugin.sns.ui.a.d", lpparam.classLoader)
-//        var method = classView.declaredMethods.findLast { it.name == "a" }
-//        XposedBridge.hookMethod(method, object : XC_MethodHook() {
-//            override fun afterHookedMethod(param: MethodHookParam) {
-//                val any = param.args[3]
-//                val vnh = getObjectField(any, "vnh")
-//                val mdW = getObjectField(vnh, "mdW")
-//                val mdt = getObjectField(vnh, "mdt")
-//
-//                Log.i("xxxxxxxxxmdW", mdW?.toString())
-//                Log.i("xxxxxxxxxmdt", mdt?.toString())
-//                val mayLaunchUrl = mCustomTabsSession?.mayLaunchUrl(Uri.parse(mdW.toString()), null, null)
-//                Log.i("xxxxxxxxxmayLaunchUrl", "$mayLaunchUrl")
-//            }
-//        })
-//
-//
-//
+        findAndHookConstructor(findClass("com.tencent.mm.plugin.sns.ui.r", lpparam.classLoader),
+                findClass("com.tencent.mm.protocal.c.bnp", lpparam.classLoader), String::class.java,
+                object : XC_MethodHook() {
+                    override fun afterHookedMethod(param: MethodHookParam) {
+                        val any = param.args[0]
+                        val vnh = getObjectField(any, "wQo")
+                        val url = getObjectField(vnh, "nfX").toString()
+                        CCTHelper.mayLaunchUrl(url)
+                    }
+                })
+
+        findAndHookConstructor(findClass("com.tencent.mm.pluginsdk.ui.applet.k", lpparam.classLoader),
+                String::class.java, Int::class.java, Any::class.java,
+                object : XC_MethodHook() {
+                    override fun afterHookedMethod(param: MethodHookParam) {
+                        val url = param.args[0].toString()
+                        CCTHelper.mayLaunchUrl(url)
+                    }
+                })
+
         findAndHookMethod(findClass("com.tencent.mm.pluginsdk.ui.chat.AppPanel", lpparam.classLoader), "cbe"
                 , object : XC_MethodHook() {
             override fun afterHookedMethod(param: MethodHookParam) {

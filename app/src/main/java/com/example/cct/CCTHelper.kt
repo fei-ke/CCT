@@ -57,16 +57,20 @@ object CCTHelper {
         isBindingCustomTabsService = true
 
         val result = CustomTabsClient.bindCustomTabsService(applicationContext, CUSTOM_TAB_PACKAGE_NAME, serviceConnection)
-
+        if (!result) {
+            isBindingCustomTabsService = false
+        }
         Log.i(TAG, "bindCustomTabsService: $result")
     }
 
     fun mayLaunchUrl(url: String) {
+        var success = false
         if (mCustomTabsSession != null) {
-            mCustomTabsSession?.mayLaunchUrl(Uri.parse(url), null, null)
+            success = mCustomTabsSession?.mayLaunchUrl(Uri.parse(url), null, null) ?: false
         } else {
             tryConnectCCTService()
         }
+        Log.i(TAG, "mayLaunchUrl success: $success, url: $url")
     }
 
     fun open(activity: Activity, intent: Intent) {
@@ -107,6 +111,7 @@ object CCTHelper {
         val rulePendingIntent = PendingIntent.getActivity(activity, 0, ruleIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val builder = CustomTabsIntent.Builder(mCustomTabsSession)
+                .setShowTitle(true)
                 .setToolbarColor(toolbarColor)
                 .setSecondaryToolbarColor(statusBarColor)
                 .addMenuItem(cctContext.getString(R.string.open_in_wechat), openInWechatPendingIntent)
