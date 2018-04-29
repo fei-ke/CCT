@@ -14,6 +14,7 @@ import android.support.customtabs.CustomTabsServiceConnection
 import android.support.customtabs.CustomTabsSession
 import android.util.Log
 import de.robv.android.xposed.XposedHelpers
+import java.util.concurrent.Executors
 
 @SuppressLint("StaticFieldLeak")
 object CCTHelper {
@@ -26,6 +27,8 @@ object CCTHelper {
     private var mCustomTabsSession: CustomTabsSession? = null
 
     private lateinit var applicationContext: Context
+
+    private val threadPool = Executors.newCachedThreadPool()
 
     private val serviceConnection = object : CustomTabsServiceConnection() {
         override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
@@ -64,13 +67,25 @@ object CCTHelper {
     }
 
     fun mayLaunchUrl(url: String) {
-        var success = false
-        if (mCustomTabsSession != null) {
-            success = mCustomTabsSession?.mayLaunchUrl(Uri.parse(url), null, null) ?: false
-        } else {
-            tryConnectCCTService()
+        threadPool.execute {
+            var success = false
+            if (mCustomTabsSession != null) {
+
+                val useCCT = try {
+                    val result = applicationContext.contentResolver.call(Uri.parse(Constants.CCT_PROVIDER), Constants.METHOD_USE_CCT, url, null)
+                    result.getBoolean(Constants.KEY_USE_CCT)
+                } catch (t: Exception) {
+                    false
+                }
+
+                if (useCCT) {
+                    success = mCustomTabsSession?.mayLaunchUrl(Uri.parse(url), null, null) ?: false
+                }
+            } else {
+                tryConnectCCTService()
+            }
+            Log.i(TAG, "mayLaunchUrl success: $success, url: $url")
         }
-        Log.i(TAG, "mayLaunchUrl success: $success, url: $url")
     }
 
     fun open(activity: Activity, intent: Intent) {

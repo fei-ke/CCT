@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
@@ -17,7 +16,8 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
 class XposedMod : IXposedHookLoadPackage {
 
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
-        if (lpparam.packageName == Constants.MM_PACKAGE_NAME && lpparam.isFirstApplication) {
+        if (lpparam.packageName == Constants.MM_PACKAGE_NAME && lpparam.isFirstApplication
+                && lpparam.processName == Constants.MM_PACKAGE_NAME) {
             hook(lpparam)
         }
     }
@@ -33,7 +33,7 @@ class XposedMod : IXposedHookLoadPackage {
         findAndHookMethod(Activity::class.java, "startActivityForResult", Intent::class.java, Int::class.java, Bundle::class.java,
                 object : XC_MethodHook() {
                     override fun beforeHookedMethod(param: MethodHookParam) {
-                        Log.i("XposedMod", "startActivityForResult", Throwable())
+//                        Log.i("XposedMod", "startActivityForResult", Throwable())
                         try {
                             val intent = param.args[0] as Intent
                             if (intent.component?.className == Constants.MM_WEB_VIEW_UI
@@ -43,8 +43,7 @@ class XposedMod : IXposedHookLoadPackage {
 
                                 val url = intent.getStringExtra(Constants.KEY_RAW_URL)
 
-                                val uri = Uri.parse(Constants.CCT_PROVIDER)
-                                val result = activity.contentResolver.call(uri, Constants.METHOD_USE_CCT, url, null)
+                                val result = activity.contentResolver.call(Uri.parse(Constants.CCT_PROVIDER), Constants.METHOD_USE_CCT, url, null)
                                 if (result.getBoolean(Constants.KEY_USE_CCT)) {
                                     CCTHelper.open(activity, intent)
 
