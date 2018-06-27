@@ -9,7 +9,7 @@ import android.os.Bundle
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
-import de.robv.android.xposed.XposedHelpers.*
+import de.robv.android.xposed.XposedHelpers.findAndHookMethod
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 
@@ -33,7 +33,6 @@ class XposedMod : IXposedHookLoadPackage {
         findAndHookMethod(Activity::class.java, "startActivityForResult", Intent::class.java, Int::class.java, Bundle::class.java,
                 object : XC_MethodHook() {
                     override fun beforeHookedMethod(param: MethodHookParam) {
-//                        Log.i("XposedMod", "startActivityForResult", Throwable())
                         try {
                             val intent = param.args[0] as Intent
                             if (intent.component?.className == Constants.MM_WEB_VIEW_UI
@@ -58,37 +57,37 @@ class XposedMod : IXposedHookLoadPackage {
                     }
                 })
 
-        findAndHookConstructor(findClass("com.tencent.mm.plugin.sns.ui.r", lpparam.classLoader),
-                findClass("com.tencent.mm.protocal.c.bnp", lpparam.classLoader), String::class.java,
-                object : XC_MethodHook() {
-                    override fun afterHookedMethod(param: MethodHookParam) {
-                        val any = param.args[0]
-                        val vnh = getObjectField(any, "wQo")
-                        val url = getObjectField(vnh, "nfX").toString()
-                        CCTHelper.mayLaunchUrl(url)
-                    }
-                })
-
-        findAndHookConstructor(findClass("com.tencent.mm.pluginsdk.ui.applet.k", lpparam.classLoader),
-                String::class.java, Int::class.java, Any::class.java,
-                object : XC_MethodHook() {
-                    override fun afterHookedMethod(param: MethodHookParam) {
-                        val url = param.args[0].toString()
-                        CCTHelper.mayLaunchUrl(url)
-                    }
-                })
-
-        findAndHookMethod(findClass("com.tencent.mm.pluginsdk.ui.chat.AppPanel", lpparam.classLoader), "cbe"
-                , object : XC_MethodHook() {
-            override fun afterHookedMethod(param: MethodHookParam) {
-                super.afterHookedMethod(param)
-                val thisObject = param.thisObject
-                val tQM = getObjectField(thisObject, "voT") as BooleanArray
-                tQM[9] = true
-
-                val count = getIntField(thisObject, "voI")
-                setIntField(thisObject, "voI", count + 1)
-            }
-        })
+//        findAndHookConstructor(findClass("com.tencent.mm.plugin.sns.ui.r", lpparam.classLoader),
+//                findClass("com.tencent.mm.protocal.c.bnp", lpparam.classLoader), String::class.java,
+//                object : XC_MethodHook() {
+//                    override fun afterHookedMethod(param: MethodHookParam) {
+//                        val any = param.args[0]
+//                        val vnh = getObjectField(any, "wQo")
+//                        val url = getObjectField(vnh, "nfX").toString()
+//                        CCTHelper.mayLaunchUrl(url)
+//                    }
+//                })
+//
+//        findAndHookConstructor(findClass("com.tencent.mm.pluginsdk.ui.applet.k", lpparam.classLoader),
+//                String::class.java, Int::class.java, Any::class.java,
+//                object : XC_MethodHook() {
+//                    override fun afterHookedMethod(param: MethodHookParam) {
+//                        val url = param.args[0].toString()
+//                        CCTHelper.mayLaunchUrl(url)
+//                    }
+//                })
+//
+//        findAndHookMethod(findClass("com.tencent.mm.pluginsdk.ui.chat.AppPanel", lpparam.classLoader), "cbe"
+//                , object : XC_MethodHook() {
+//            override fun afterHookedMethod(param: MethodHookParam) {
+//                super.afterHookedMethod(param)
+//                val thisObject = param.thisObject
+//                val tQM = getObjectField(thisObject, "voT") as BooleanArray
+//                tQM[9] = true
+//
+//                val count = getIntField(thisObject, "voI")
+//                setIntField(thisObject, "voI", count + 1)
+//            }
+//        })
     }
 }

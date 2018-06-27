@@ -6,14 +6,12 @@ import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.support.customtabs.CustomTabsClient
 import android.support.customtabs.CustomTabsIntent
 import android.support.customtabs.CustomTabsServiceConnection
 import android.support.customtabs.CustomTabsSession
 import android.util.Log
-import de.robv.android.xposed.XposedHelpers
 import java.util.concurrent.Executors
 
 @SuppressLint("StaticFieldLeak")
@@ -108,15 +106,15 @@ object CCTHelper {
             Constants.MM_DEFAULT_STATUS_BAR_COLOR
         }
 
-        val toolbarColor = try {
-            val actionBar = XposedHelpers.callMethod(activity, "getSupportActionBar")
-            val actionBarContainer = XposedHelpers.getObjectField(actionBar, "It")
-            val colorDrawable = XposedHelpers.getObjectField(actionBarContainer, "KT") as ColorDrawable
-            colorDrawable.color
-        } catch (t: Throwable) {
-            Constants.MM_DEFAULT_TOOL_BAR_COLOR
-        }
-
+//        val toolbarColor = try {
+//            val actionBar = XposedHelpers.callMethod(activity, "getSupportActionBar")
+//            val actionBarContainer = XposedHelpers.getObjectField(actionBar, "It")
+//            val colorDrawable = XposedHelpers.getObjectField(actionBarContainer, "KT") as ColorDrawable
+//            colorDrawable.color
+//        } catch (t: Throwable) {
+//            Constants.MM_DEFAULT_TOOL_BAR_COLOR
+//        }
+        val toolbarColor = Constants.MM_DEFAULT_TOOL_BAR_COLOR
 
         val ruleIntent = Intent(Constants.ACTION_ADD_RULE)
         ruleIntent.setClassName(BuildConfig.APPLICATION_ID, EditRuleActivity::class.java.name)
