@@ -36,15 +36,15 @@ class RuleListActivity : AppCompatActivity() {
 
     class RuleListFragment : ListFragment() {
         private lateinit var data: MutableList<Map<String, *>>
-        override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             listView.setOnItemLongClickListener { _, _, position, _ ->
                 val ruleName = data[position][KEY_RULE_NAME].toString()
 
-                AlertDialog.Builder(activity)
+                AlertDialog.Builder(activity!!)
                         .setTitle(getString(R.string.confirm_delete))
                         .setPositiveButton(R.string.dialog_ok, { _, _ ->
-                            Pref.remove(activity, ruleName)
+                            Pref.remove(activity!!, ruleName)
                             data.removeAt(position)
                             (listAdapter as SimpleAdapter)
                                     .notifyDataSetChanged()
@@ -57,7 +57,7 @@ class RuleListActivity : AppCompatActivity() {
 
         override fun onResume() {
             super.onResume()
-            data = ArrayList(Pref.getAll(activity)
+            data = ArrayList(Pref.getAll(activity!!)
                     .toList()
                     .map { mapOf(KEY_RULE_NAME to it.first, KEY_RULE_PATTERN to it.second) }
             )
