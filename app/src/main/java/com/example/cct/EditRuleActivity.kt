@@ -42,6 +42,8 @@ class EditRuleActivity : AppCompatActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
 
+            val arguments = arguments ?: throw RuntimeException("arguments should not be null!")
+
             rawUrl = arguments.getString(Constants.KEY_RAW_URL)
             rawName = arguments.getString(Constants.KEY_RULE_NAME)
             rulePattern = arguments.getString(Constants.KEY_RULE_PATTERN)
@@ -56,6 +58,7 @@ class EditRuleActivity : AppCompatActivity() {
             editTextName.setText(rawName)
             editTextPattern.setText(rulePattern)
 
+            val context = activity!!
             val dialogBuilder = AlertDialog.Builder(context, theme)
                     .setMessage(R.string.edit_rule_dialog_message)
                     .setView(contentView)
@@ -71,7 +74,7 @@ class EditRuleActivity : AppCompatActivity() {
             editTextName.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable) {
                     val text = s.toString()
-                    if (rawName != text && Pref.hasKey(activity, text)) {
+                    if (rawName != text && Pref.hasKey(context, text)) {
                         editTextName.error = getString(R.string.duplicate_rule_name_hint)
                     }
                 }
@@ -98,9 +101,9 @@ class EditRuleActivity : AppCompatActivity() {
                     }
 
                     if (rawName != null && rawName != name) {
-                        Pref.remove(activity, rawName!!)
+                        Pref.remove(context, rawName!!)
                     }
-                    Pref.add(activity, name, pattern)
+                    Pref.add(context, name, pattern)
                     dismiss()
                 }
 
@@ -115,7 +118,7 @@ class EditRuleActivity : AppCompatActivity() {
 
         override fun onDismiss(dialog: DialogInterface?) {
             super.onDismiss(dialog)
-            activity.finish()
+            activity?.finish()
         }
 
     }
