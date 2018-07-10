@@ -18,7 +18,7 @@ import java.util.concurrent.Executors
 object CCTHelper {
     private const val TAG = "CCTHelper"
 
-    private const val CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome"
+    private const val CUSTOM_TAB_PACKAGE_NAME = Constants.CHROME_PACKAGE_NAME
 
     private var isBindingCustomTabsService: Boolean = false
 

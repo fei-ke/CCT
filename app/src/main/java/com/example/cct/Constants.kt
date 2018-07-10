@@ -8,6 +8,9 @@ object Constants {
     const val MM_DEFAULT_STATUS_BAR_COLOR = 0xFF303034.toInt()
     const val MM_DEFAULT_TOOL_BAR_COLOR = 0xFF393A3E.toInt()
 
+    const val CHROME_PACKAGE_NAME = "com.android.chrome"
+    const val CHROME_CUSTOM_TAB_ACTIVITY = "org.chromium.chrome.browser.customtabs.CustomTabActivity"
+
     const val ACTION_ADD_RULE = BuildConfig.APPLICATION_ID + ".add_rule"
     const val CCT_PROVIDER = "content://${BuildConfig.APPLICATION_ID}.provider"
     const val METHOD_USE_CCT = "useCCT"

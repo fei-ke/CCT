@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
@@ -18,11 +19,14 @@ class XposedMod : IXposedHookLoadPackage {
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
         if (lpparam.packageName == Constants.MM_PACKAGE_NAME && lpparam.isFirstApplication
                 && lpparam.processName == Constants.MM_PACKAGE_NAME) {
-            hook(lpparam)
+            hookMM(lpparam)
+        } else if (lpparam.packageName == "com.android.chrome" && lpparam.isFirstApplication
+                && lpparam.processName == "com.android.chrome") {
+            hookChrome(lpparam)
         }
     }
 
-    private fun hook(lpparam: XC_LoadPackage.LoadPackageParam) {
+    private fun hookMM(lpparam: XC_LoadPackage.LoadPackageParam) {
 
         findAndHookMethod(Application::class.java, "onCreate", object : XC_MethodHook() {
             override fun afterHookedMethod(param: MethodHookParam) {
@@ -89,5 +93,21 @@ class XposedMod : IXposedHookLoadPackage {
 //                setIntField(thisObject, "voI", count + 1)
 //            }
 //        })
+    }
+
+    private fun hookChrome(lpparam: XC_LoadPackage.LoadPackageParam) {
+        findAndHookMethod(Constants.CHROME_CUSTOM_TAB_ACTIVITY, lpparam.classLoader,
+                "onOptionsItemSelected", MenuItem::class.java, object : XC_MethodHook() {
+            override fun afterHookedMethod(param: MethodHookParam) {
+                //close chrome custom tab when select menu item 'Open in Wechat / 返回微信打开'
+                val menuItem = param.args[0] as MenuItem
+                val thisActivity = param.thisObject as Activity
+                val thatContext = thisActivity.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY)
+                val text = thatContext.getString(R.string.open_in_wechat)
+                if (menuItem.title == text) {
+                    thisActivity.finish()
+                }
+            }
+        })
     }
 }
