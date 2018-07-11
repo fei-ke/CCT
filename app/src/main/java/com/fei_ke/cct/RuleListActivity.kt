@@ -1,4 +1,4 @@
-package com.example.cct
+package com.fei_ke.cct
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,8 +11,8 @@ import android.view.View
 import android.view.Window
 import android.widget.ListView
 import android.widget.SimpleAdapter
-import com.example.cct.Constants.KEY_RULE_NAME
-import com.example.cct.Constants.KEY_RULE_PATTERN
+import com.fei_ke.cct.Constants.KEY_RULE_NAME
+import com.fei_ke.cct.Constants.KEY_RULE_PATTERN
 
 class RuleListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

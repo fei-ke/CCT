@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cct">
+    package="com.fei_ke.cct">
 
     <application
-        android:name=".App"
+        android:name="com.fei_ke.cct.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RuleListActivity">
+        <activity android:name="com.fei_ke.cct.RuleListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditRuleActivity"
+            android:name="com.fei_ke.cct.EditRuleActivity"
             android:exported="true"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Translucent">
@@ -29,7 +29,7 @@
         </activity>
 
         <provider
-            android:name=".CCTProvider"
+            android:name="com.fei_ke.cct.CCTProvider"
             android:authorities="${applicationId}.provider"
             android:exported="true" />
 

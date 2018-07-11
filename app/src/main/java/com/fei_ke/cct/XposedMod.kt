@@ -1,4 +1,4 @@
-package com.example.cct
+package com.fei_ke.cct
 
 import android.app.Activity
 import android.app.Application
@@ -81,18 +81,6 @@ class XposedMod : IXposedHookLoadPackage {
 //                    }
 //                })
 //
-//        findAndHookMethod(findClass("com.tencent.mm.pluginsdk.ui.chat.AppPanel", lpparam.classLoader), "cbe"
-//                , object : XC_MethodHook() {
-//            override fun afterHookedMethod(param: MethodHookParam) {
-//                super.afterHookedMethod(param)
-//                val thisObject = param.thisObject
-//                val tQM = getObjectField(thisObject, "voT") as BooleanArray
-//                tQM[9] = true
-//
-//                val count = getIntField(thisObject, "voI")
-//                setIntField(thisObject, "voI", count + 1)
-//            }
-//        })
     }
 
     private fun hookChrome(lpparam: XC_LoadPackage.LoadPackageParam) {

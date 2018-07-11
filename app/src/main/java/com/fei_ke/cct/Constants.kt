@@ -1,4 +1,4 @@
-package com.example.cct
+package com.fei_ke.cct
 
 object Constants {
     const val MM_PACKAGE_NAME = "com.tencent.mm"

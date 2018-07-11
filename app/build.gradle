@@ -5,12 +5,14 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.example.cct"
+        applicationId "com.fei_ke.cct"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        resConfigs 'xxhdpi'
     }
     buildTypes {
         release {
