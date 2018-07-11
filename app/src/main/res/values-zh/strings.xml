@@ -11,4 +11,8 @@
     <string name="rule_pattern_empty_hint">不能为空</string>
     <string name="menu_add_rule">新增规则</string>
     <string name="confirm_delete">确认删除？</string>
+    <string name="menu_restore_default_rules">恢复默认规则</string>
+    <string name="dialog_restore_rules_message">恢复默认规则列表的同时，是否需要保留自定义规则</string>
+    <string name="dialog_keep_custom_rules">保留</string>
+    <string name="dialog_delete_custom_rule">删除</string>
 </resources>

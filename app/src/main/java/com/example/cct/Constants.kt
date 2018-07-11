@@ -20,4 +20,6 @@ object Constants {
     const val KEY_RULE_NAME = "rule_name"
     const val KEY_RULE_PATTERN = "rule_pattern"
     const val IGNORE_LIST_PREF_NAME = "ignore_list"
+
+    const val KEY_DEFAULT_RULE_VERSION = "default_rule_version"
 }

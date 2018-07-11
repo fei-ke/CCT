@@ -31,7 +31,29 @@ class RuleListActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+        menu.add(R.string.menu_restore_default_rules)
+                .setOnMenuItemClickListener {
+                    restoreDefaultRules()
+                    true
+                }
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun restoreDefaultRules() {
+        AlertDialog.Builder(this)
+                .setMessage(R.string.dialog_restore_rules_message)
+                .setNeutralButton(R.string.dialog_cancel, null)
+                .setPositiveButton(R.string.dialog_keep_custom_rules) { _, _ ->
+                    Pref.restoreDefaultIgnoreList(this, true)
+                    recreate()
+                }
+                .setNegativeButton(R.string.dialog_delete_custom_rule) { _, _ ->
+                    Pref.restoreDefaultIgnoreList(this, false)
+                    recreate()
+                }
+                .show()
+
+
     }
 
     class RuleListFragment : ListFragment() {
@@ -43,12 +65,12 @@ class RuleListActivity : AppCompatActivity() {
 
                 AlertDialog.Builder(activity!!)
                         .setTitle(getString(R.string.confirm_delete))
-                        .setPositiveButton(R.string.dialog_ok, { _, _ ->
+                        .setPositiveButton(R.string.dialog_ok) { _, _ ->
                             Pref.remove(activity!!, ruleName)
                             data.removeAt(position)
                             (listAdapter as SimpleAdapter)
                                     .notifyDataSetChanged()
-                        })
+                        }
                         .setNegativeButton(R.string.dialog_cancel, null)
                         .show()
                 return@setOnItemLongClickListener true

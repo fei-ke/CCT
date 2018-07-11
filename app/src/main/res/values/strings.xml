@@ -11,4 +11,8 @@
     <string name="rule_pattern_empty_hint">Rule pattern can\'t empty</string>
     <string name="menu_add_rule">Add new rule</string>
     <string name="confirm_delete">Confirm delete?</string>
+    <string name="menu_restore_default_rules">Restore Default Rules</string>
+    <string name="dialog_restore_rules_message">Keep custom rules while restoring the default rules?</string>
+    <string name="dialog_keep_custom_rules">Keep</string>
+    <string name="dialog_delete_custom_rule">Delete</string>
 </resources>
