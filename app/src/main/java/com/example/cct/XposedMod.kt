@@ -20,8 +20,8 @@ class XposedMod : IXposedHookLoadPackage {
         if (lpparam.packageName == Constants.MM_PACKAGE_NAME && lpparam.isFirstApplication
                 && lpparam.processName == Constants.MM_PACKAGE_NAME) {
             hookMM(lpparam)
-        } else if (lpparam.packageName == "com.android.chrome" && lpparam.isFirstApplication
-                && lpparam.processName == "com.android.chrome") {
+        } else if (lpparam.packageName == Constants.CHROME_PACKAGE_NAME && lpparam.isFirstApplication
+                && lpparam.processName == Constants.CHROME_PACKAGE_NAME) {
             hookChrome(lpparam)
         }
     }
