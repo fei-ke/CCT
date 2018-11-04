@@ -125,8 +125,8 @@ object CCTHelper {
 
         val builder = CustomTabsIntent.Builder(mCustomTabsSession)
                 .setShowTitle(true)
-                .setToolbarColor(toolbarColor)
-                .setSecondaryToolbarColor(statusBarColor)
+//                .setToolbarColor(toolbarColor)
+//                .setSecondaryToolbarColor(statusBarColor)
                 .addMenuItem(cctContext.getString(R.string.open_in_wechat), openInWechatPendingIntent)
                 .addMenuItem(cctContext.getString(R.string.add_rule), rulePendingIntent)
                 .addDefaultShareMenuItem()
