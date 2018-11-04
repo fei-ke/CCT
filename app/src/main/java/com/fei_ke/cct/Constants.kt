@@ -2,7 +2,10 @@ package com.fei_ke.cct
 
 object Constants {
     const val MM_PACKAGE_NAME = "com.tencent.mm"
-    const val MM_WEB_VIEW_UI = "com.tencent.mm.plugin.webview.ui.tools.WebViewUI"
+    val MM_WEB_VIEW_UI_SET = setOf(
+            "com.tencent.mm.plugin.webview.ui.tools.WebViewUI",
+            "com.tencent.mm.plugin.webview.ui.tools.WebviewMpUI"
+    )
     const val KEY_RAW_URL = "rawUrl"
 
     const val MM_DEFAULT_STATUS_BAR_COLOR = 0xFF303034.toInt()

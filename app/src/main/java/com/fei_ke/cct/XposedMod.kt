@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import com.fei_ke.cct.Constants.MM_WEB_VIEW_UI_SET
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
@@ -39,7 +40,7 @@ class XposedMod : IXposedHookLoadPackage {
                     override fun beforeHookedMethod(param: MethodHookParam) {
                         try {
                             val intent = param.args[0] as Intent
-                            if (intent.component?.className == Constants.MM_WEB_VIEW_UI
+                            if (MM_WEB_VIEW_UI_SET.contains(intent.component?.className)
                                     && !intent.getBooleanExtra(Constants.KEY_IGNORE_CCT, false)) {
 
                                 val activity = param.thisObject as Activity
