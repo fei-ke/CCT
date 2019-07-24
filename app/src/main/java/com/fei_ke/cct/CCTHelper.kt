@@ -7,11 +7,11 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.browser.customtabs.CustomTabsSession
-import android.util.Log
 import java.util.concurrent.Executors
 
 @SuppressLint("StaticFieldLeak")
@@ -25,6 +25,7 @@ object CCTHelper {
     private var mCustomTabsSession: CustomTabsSession? = null
 
     private lateinit var applicationContext: Context
+    private lateinit var packageConfig: Constants.PackageConfig
 
     private val threadPool = Executors.newCachedThreadPool()
 
@@ -43,9 +44,9 @@ object CCTHelper {
         }
     }
 
-    fun init(context: Context) {
-        applicationContext = context.applicationContext
-
+    fun init(context: Context, packageConfig: Constants.PackageConfig) {
+        this.applicationContext = context.applicationContext
+        this.packageConfig = packageConfig
         tryConnectCCTService()
     }
 
@@ -91,43 +92,33 @@ object CCTHelper {
             tryConnectCCTService()
         }
 
-        val url = intent.getStringExtra(Constants.KEY_RAW_URL)
+        val url = intent.getStringExtra(packageConfig.keyRawUrl)
 
         intent.putExtra(Constants.KEY_IGNORE_CCT, true)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-        val openInWechatPendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        val openInOriginAppPendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
         val cctContext = activity.createPackageContext(BuildConfig.APPLICATION_ID, Context.CONTEXT_IGNORE_SECURITY)
-
-        val statusBarColor = try {
-            activity.window.statusBarColor
-        } catch (t: Throwable) {
-            Constants.MM_DEFAULT_STATUS_BAR_COLOR
-        }
-
-//        val toolbarColor = try {
-//            val actionBar = XposedHelpers.callMethod(activity, "getSupportActionBar")
-//            val actionBarContainer = XposedHelpers.getObjectField(actionBar, "It")
-//            val colorDrawable = XposedHelpers.getObjectField(actionBarContainer, "KT") as ColorDrawable
-//            colorDrawable.color
-//        } catch (t: Throwable) {
-//            Constants.MM_DEFAULT_TOOL_BAR_COLOR
-//        }
-        val toolbarColor = Constants.MM_DEFAULT_TOOL_BAR_COLOR
 
         val ruleIntent = Intent(Constants.ACTION_ADD_RULE)
         ruleIntent.setClassName(BuildConfig.APPLICATION_ID, EditRuleActivity::class.java.name)
         ruleIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-        ruleIntent.putExtras(intent.extras)
+        ruleIntent.putExtra(Constants.KEY_RAW_URL, url)
 
         val rulePendingIntent = PendingIntent.getActivity(activity, 0, ruleIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+        val packageManager = applicationContext.packageManager
+        val originAppName = try {
+            packageManager.getApplicationInfo(packageConfig.packageName, 0)
+                .run(packageManager::getApplicationLabel)
+        } catch (t: Throwable) {
+            null
+        }
+
         val builder = CustomTabsIntent.Builder(mCustomTabsSession)
                 .setShowTitle(true)
-//                .setToolbarColor(toolbarColor)
-//                .setSecondaryToolbarColor(statusBarColor)
-                .addMenuItem(cctContext.getString(R.string.open_in_wechat), openInWechatPendingIntent)
+                .addMenuItem(cctContext.getString(R.string.open_in_origin_app, originAppName), openInOriginAppPendingIntent)
                 .addMenuItem(cctContext.getString(R.string.add_rule), rulePendingIntent)
                 .addDefaultShareMenuItem()
                 .setStartAnimations(cctContext, R.anim.slide_in_right, R.anim.slide_out_left)

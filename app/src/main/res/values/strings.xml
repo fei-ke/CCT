@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">CCT</string>
-    <string name="xposedDescription">Force Wechat use Chrome Custom Tabs open web link</string>
-    <string name="open_in_wechat">Open in Wechat</string>
+    <string name="xposedDescription">Force Wechat / Wework use Chrome Custom Tabs open web link</string>
+    <string name="open_in_origin_app">Open in %s</string>
     <string name="add_rule">Edit Rule</string>
-    <string name="edit_rule_dialog_message">Use Regular Expression to match web link, if matched the link will be opened in Wechat.</string>
+    <string name="edit_rule_dialog_message">Use Regular Expression to match web link, if matched, the link will be opened in origin application.</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="test">Test</string>

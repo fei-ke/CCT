@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">CCT</string>
-    <string name="xposedDescription">使用 Chrome Custom Tabs 打开微信内连接</string>
-    <string name="open_in_wechat">返回微信打开</string>
+    <string name="xposedDescription">使用 Chrome Custom Tabs 打开微信/企业微信内连接</string>
+    <string name="open_in_origin_app">返回%s打开</string>
     <string name="add_rule">编辑规则</string>
-    <string name="edit_rule_dialog_message">使用正则进行匹配，符合规则的链接将会在微信内部打开</string>
+    <string name="edit_rule_dialog_message">使用正则进行匹配，符合规则的链接将会在原应用内部打开</string>
     <string name="dialog_ok">确定</string>
     <string name="dialog_cancel">取消</string>
     <string name="test">测试</string>
