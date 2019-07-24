@@ -64,7 +64,7 @@ object Pref {
             editor.clear()
         }
 
-        defaultList.forEach { t, u -> editor.putString(t, u) }
+        defaultList.forEach { entry -> editor.putString(entry.key, entry.value) }
         editor.apply()
     }
 }
