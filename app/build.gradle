@@ -12,7 +12,7 @@ android {
         versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        resConfigs 'xxhdpi'
+        resConfigs 'xxhdpi', 'zh'
     }
     buildTypes {
         release {
@@ -25,9 +25,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly 'de.robv.android.xposed:api:82'
 
     implementation 'androidx.browser:browser:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
 }
