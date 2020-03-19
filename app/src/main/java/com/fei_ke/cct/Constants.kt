@@ -6,7 +6,8 @@ object Constants {
             packageName = "com.tencent.mm",
             webViewUiSet = setOf(
                 "com.tencent.mm.plugin.webview.ui.tools.WebViewUI",
-                "com.tencent.mm.plugin.webview.ui.tools.WebviewMpUI"
+                "com.tencent.mm.plugin.webview.ui.tools.WebviewMpUI",
+                "com.tencent.mm.plugin.brandservice.ui.timeline.preload.ui.TmplWebViewTooLMpUI"
             ),
             keyRawUrl = "rawUrl"
         ),
