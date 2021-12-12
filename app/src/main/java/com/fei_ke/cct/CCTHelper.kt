@@ -1,12 +1,12 @@
 package com.fei_ke.cct
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Parcelable
 import android.util.Log
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
@@ -87,12 +87,20 @@ object CCTHelper {
         }
     }
 
-    fun open(activity: Activity, intent: Intent) {
+    fun open(activity: Context, origin: Intent) {
         if (mCustomTabsSession == null) {
             tryConnectCCTService()
         }
+        val url = origin.getStringExtra(packageConfig.keyRawUrl)
 
-        val url = intent.getStringExtra(packageConfig.keyRawUrl)
+        //remove Parcelable type extra
+        val intent = Intent(origin)
+        val extras = intent.extras!!
+        extras.keySet().forEach {
+            if (extras.get(it) is Parcelable) {
+                intent.removeExtra(it)
+            }
+        }
 
         intent.putExtra(Constants.KEY_IGNORE_CCT, true)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
