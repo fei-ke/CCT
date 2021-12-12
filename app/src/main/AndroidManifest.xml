@@ -42,6 +42,9 @@
         <meta-data
             android:name="xposeddescription"
             android:value="@string/xposedDescription" />
+        <meta-data
+            android:name="xposedscope"
+            android:resource="@array/xposed_scope" />
     </application>
 
 </manifest>

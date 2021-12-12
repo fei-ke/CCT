@@ -15,4 +15,9 @@
     <string name="dialog_restore_rules_message">Keep custom rules while restoring the default rules?</string>
     <string name="dialog_keep_custom_rules">Keep</string>
     <string name="dialog_delete_custom_rule">Delete</string>
+
+    <string-array name="xposed_scope">
+        <item>com.tencent.mm</item>
+        <item>com.tencent.wework</item>
+    </string-array>
 </resources>
