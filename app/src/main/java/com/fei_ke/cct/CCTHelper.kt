@@ -93,6 +93,13 @@ object CCTHelper {
         }
         val url = origin.getStringExtra(packageConfig.keyRawUrl)
 
+        if (!isBindingCustomTabsService){
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            activity.startActivity(intent)
+            return
+        }
+
         //remove Parcelable type extra
         val intent = Intent(origin)
         val extras = intent.extras!!

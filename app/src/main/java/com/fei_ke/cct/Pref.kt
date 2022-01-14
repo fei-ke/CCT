@@ -35,8 +35,11 @@ object Pref {
 
     private var preferences: SharedPreferences? = null
 
-    private fun getPreference(context: Context) = preferences
-            ?: context.getSharedPreferences(Constants.IGNORE_LIST_PREF_NAME, Context.MODE_PRIVATE)
+    private fun getPreference(context: Context) = preferences ?: try {
+        context.getSharedPreferences(Constants.IGNORE_LIST_PREF_NAME, Context.MODE_WORLD_READABLE)
+    } catch (t: SecurityException) {
+        context.getSharedPreferences(Constants.IGNORE_LIST_PREF_NAME, Context.MODE_PRIVATE)
+    }
 
     fun getAll(context: Context): Map<String, *> =
             getPreference(context).all

@@ -6,10 +6,10 @@ import android.app.Application
 import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.view.MenuItem
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.XC_MethodHook
+import de.robv.android.xposed.XSharedPreferences
 import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers.findAndHookConstructor
 import de.robv.android.xposed.XposedHelpers.findAndHookMethod
@@ -17,6 +17,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 
 class XposedMod : IXposedHookLoadPackage {
+    private val pref = XSharedPreferences(BuildConfig.APPLICATION_ID, Constants.IGNORE_LIST_PREF_NAME)
 
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
         Constants.PACKAGE_CONFIG.forEach { config ->
@@ -66,11 +67,7 @@ class XposedMod : IXposedHookLoadPackage {
 
                 val url = intent.getStringExtra(config.keyRawUrl)
 
-                val result =
-                    context.contentResolver.call(Uri.parse(Constants.CCT_PROVIDER), Constants.METHOD_USE_CCT, url, null)
-                        ?: return null
-
-                if (result.getBoolean(Constants.KEY_USE_CCT)) {
+                if (useCCT(url)) {
                     CCTHelper.open(context, intent)
                     return Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null)
                 }
@@ -79,6 +76,11 @@ class XposedMod : IXposedHookLoadPackage {
             XposedBridge.log(t)
         }
         return null
+    }
+    private fun useCCT(url: String?): Boolean {
+        url ?: return false
+        pref.reload()
+        return pref.all.values.find { Regex(it.toString()).matches(url) } == null
     }
 
     private fun hookChrome(lpparam: XC_LoadPackage.LoadPackageParam) {

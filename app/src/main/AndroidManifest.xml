@@ -28,17 +28,12 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name="com.fei_ke.cct.CCTProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="true" />
-
         <meta-data
             android:name="xposedmodule"
             android:value="true" />
         <meta-data
             android:name="xposedminversion"
-            android:value="42+" />
+            android:value="93+" />
         <meta-data
             android:name="xposeddescription"
             android:value="@string/xposedDescription" />
